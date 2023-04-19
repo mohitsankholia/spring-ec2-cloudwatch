@@ -10,9 +10,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "prod" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "prod" ]
 
 jobs:
   build:
@@ -29,5 +29,16 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn clean install
+   
     - name: Execute jar file
       run: sudo kill -9 `sudo lsof -t -i:8080` & sudo java -jar /home/ubuntu/actions-runner/_work/spring-ec2-cloudwatch/spring-ec2-cloudwatch/target/SpringSecurity-0.0.1-SNAPSHOT.jar &
+
+    - uses: mr-smithers-excellent/docker-build-push@v6
+      name: Build & push Docker image
+      with:
+        image: mohitsankholia/springboot-security-ec2
+        tags: latest
+        registry: docker.io
+        dockerfile: Dockerfile.ci
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
