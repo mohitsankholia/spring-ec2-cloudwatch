@@ -10,7 +10,7 @@ public class SpringController {
 	@GetMapping("/")
 	private String home() {
 		
-		return ("<h1>welcome to home</h1>");
+		return ("<h1>welcome to new home</h1>");
 	}
 	
 	@GetMapping("/user/one")
